@@ -1,0 +1,8 @@
+[workspace]
+resolver = "3"
+members = [
+  "application",
+  "custom_plugin",
+  "plugin_api",
+  "plugin_host_api",
+]

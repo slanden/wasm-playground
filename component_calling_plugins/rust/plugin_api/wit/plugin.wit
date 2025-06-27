@@ -1,0 +1,19 @@
+package example:plugin;
+
+interface plugin-interface {
+  resource extension-state {
+    constructor();
+    index: func() -> u32;
+    set-index: func(i: u32);
+  }
+
+  add: func(a: u32, b: u32) -> u32;
+  parse: func(bytes: list<u8>) -> extension-state;
+}
+
+world plugin {
+  // exports are what the component will export that the
+  // host will call
+  export greeting: func(name: string) -> string;
+  export plugin-interface;
+}
