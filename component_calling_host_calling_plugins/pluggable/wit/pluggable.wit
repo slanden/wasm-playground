@@ -1,0 +1,10 @@
+package example:pluggable;
+
+interface pluggable-interface {
+  run: func(input: list<u8>) -> bool;
+}
+
+world pluggable {
+  import example:plugin-host/host-interface;
+  export pluggable-interface;
+}

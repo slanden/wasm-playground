@@ -1,0 +1,45 @@
+package example:plugin-host;
+
+// Copied from *plugin_host/* because
+// `wasmtime::component::bindgen!` doesn't allow searching
+// multiple `path`s for WIT files.
+interface plugin-interface {
+  resource extension-state {
+    constructor();
+    index: func() -> u32;
+    set-index: func(i: u32);
+  }
+
+  add: func(a: u32, b: u32) -> u32;
+  parse: func(bytes: list<u8>) -> extension-state;
+}
+
+// Copied from *pluggable/* because
+// `wasmtime::component::bindgen!` doesn't allow searching
+// multiple `path`s for WIT files.
+interface pluggable-interface {
+  use host-interface.{plugin-list};
+
+  // Pass in a list of plugins this pluggable can call
+  run: func(plugins: borrow<plugin-list>, input: list<u8>) -> bool;
+}
+
+interface host-interface {
+  use plugin-interface.{extension-state};
+  resource plugin-list{
+    constructor();
+    /// Length of the plugin list
+    len: func() -> u32;
+    /// Run the plugin at `index`
+    run-plugin: func(index: u32, input: list<u8>) -> extension-state;
+  }
+  
+  host-test: func() -> bool;
+}
+
+world plugin-host {
+  import host-interface;
+  import pluggable-interface;
+  // import plugin-interface;
+  // export pluggable-interface;
+}

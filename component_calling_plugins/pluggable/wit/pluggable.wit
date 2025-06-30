@@ -1,0 +1,11 @@
+package example:pluggable;
+
+interface pluggable-interface {
+  use example:plugin-host/host-interface.{plugin-list};
+  // Pass in a list of plugins this pluggable can call
+  run: func(plugins: borrow<plugin-list>, input: list<u8>) -> bool;
+}
+
+world pluggable {
+  export pluggable-interface;
+}

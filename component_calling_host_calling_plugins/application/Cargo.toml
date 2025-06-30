@@ -1,0 +1,10 @@
+[package]
+name = "application"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+plugin_host_api = { path = "../plugin_host_api" }
+plugin_api = { path = "../plugin_api" }
+wasmtime = { version="33", features=["component-model", "cranelift", "std", "runtime"] }
+wasmtime-wasi = "33"
