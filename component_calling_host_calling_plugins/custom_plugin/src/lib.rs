@@ -13,13 +13,13 @@ impl PluginInterface for MyPlugin {
         a + b
     }
     fn parse(bytes: Vec<u8>) -> ExtensionStateResource {
+        println!("custom_plugin: Hello from `custom_plugin.parse`");
         let state = ExtensionState::new();
         if !bytes.get(0).is_some_and(|b| *b == b'(') {
             return ExtensionStateResource::new(state);
         }
         state.set_index(12);
 
-        println!("parse() from plugin");
         ExtensionStateResource::new(state)
     }
 }

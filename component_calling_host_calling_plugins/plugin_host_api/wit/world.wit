@@ -1,5 +1,12 @@
 package example:plugin-host;
 
+// Copied from *pluggable/* because
+// `wasmtime::component::bindgen!` doesn't allow searching
+// multiple `path`s for WIT files.
+interface pluggable-interface {
+  run: func(input: list<u8>) -> bool;
+}
+
 // Copied from *plugin_api/* because
 // `wasmtime::component::bindgen!` doesn't allow searching
 // multiple `path`s for WIT files.
@@ -14,13 +21,6 @@ interface plugin-interface {
   parse: func(bytes: list<u8>) -> extension-state;
 }
 
-// Copied from *pluggable/* because
-// `wasmtime::component::bindgen!` doesn't allow searching
-// multiple `path`s for WIT files.
-interface pluggable-interface {
-  run: func(input: list<u8>) -> bool;
-}
-
 interface host-interface {
   use plugin-interface.{extension-state};
   
@@ -30,5 +30,5 @@ interface host-interface {
 
 world plugin-host {
   import host-interface;
-  // export pluggable-interface;
+  export pluggable-interface;
 }

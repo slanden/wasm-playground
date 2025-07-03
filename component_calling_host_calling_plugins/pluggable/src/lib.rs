@@ -13,12 +13,25 @@ pub mod bindings {
     });
 }
 
+use bindings::example::pluggable::host_interface;
 use bindings::exports::example::pluggable::pluggable_interface::Guest;
 struct Pluggable;
 
 impl Guest for Pluggable {
     fn run(input: Vec<u8>) -> bool {
-        println!("Hello from `pluggable.run`");
+        println!("pluggable: Hello from `pluggable.run`");
+        println!(
+            "pluggable: plugin length = {}",
+            host_interface::plugins_len()
+        );
+        for i in 0..host_interface::plugins_len() {
+            println!("pluggable: call plugin {i}");
+            let state = host_interface::run_plugin(i, &input);
+            println!(
+                "pluggable: plugin {i} returned with an index value of {}",
+                state.index()
+            );
+        }
         true
     }
 }
