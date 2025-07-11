@@ -1,0 +1,35 @@
+package example:plugin;
+
+interface plugin-interface {
+  use pluggable-to-plugin.{extension-state};
+  add: func(a: u32, b: u32) -> u32;
+  parse: func(bytes: list<u8>, state: borrow<extension-state>);
+}
+
+interface pluggable-interface {
+  run: func(input: list<u8>) -> bool;
+}
+interface pluggable-to-plugin {
+  resource extension-state {
+    constructor();
+    index: func() -> u32;
+    set-index: func(i: u32);
+  }
+}
+
+interface host-interface {
+  use pluggable-to-plugin.{extension-state};
+
+  plugins-len: func() -> u32;
+  run-plugin: func(index: u32, input: list<u8>, state: borrow<extension-state>);
+}
+
+world pluggable {
+  import host-interface;
+  export pluggable-interface;
+  export pluggable-to-plugin;
+}
+
+world plugin {
+  export plugin-interface;
+}

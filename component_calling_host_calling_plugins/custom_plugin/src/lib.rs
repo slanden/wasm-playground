@@ -1,26 +1,28 @@
-use plugin_api::{
-    ExtensionState, ExtensionStateResource, GuestExtensionState, PluginInterface,
-    implementer_bindings::export,
+use plugin_api::export;
+use plugin_api::implementer_bindings::{
+    example::plugin::pluggable_to_plugin::ExtensionState as ExtensionStateResource,
+    exports::example::plugin::plugin_interface::Guest,
 };
 
 struct MyPlugin;
 
-impl PluginInterface for MyPlugin {
-    type ExtensionState = ExtensionState;
+impl Guest for MyPlugin {
     fn add(a: u32, b: u32) -> u32 {
-        println!("Add works!");
+        println!("custom_plugin: Add works!");
         println!("{}+{}={}", a, b, a + b);
         a + b
     }
-    fn parse(bytes: Vec<u8>) -> ExtensionStateResource {
-        println!("custom_plugin: Hello from `custom_plugin.parse`");
-        let state = ExtensionState::new();
-        if !bytes.get(0).is_some_and(|b| *b == b'(') {
-            return ExtensionStateResource::new(state);
-        }
-        state.set_index(12);
 
-        ExtensionStateResource::new(state)
+    fn parse(bytes: Vec<u8>, state: &ExtensionStateResource) {
+        println!("custom_plugin: Hello from `custom_plugin.parse`");
+        // let state = ExtensionStateResource::new();
+        // if !bytes.get(0).is_some_and(|b| *b == b'(') {
+        //     return state;
+        // }
+
+        println!("plugin ext state: {:?}", state);
+        state.set_index(18);
+        println!("plugin ext state index: {:?}", state.index());
     }
 }
 

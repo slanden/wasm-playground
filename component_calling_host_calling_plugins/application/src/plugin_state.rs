@@ -6,7 +6,7 @@ use {
     std::sync::{Arc, Mutex},
     wasmtime::{
         Config, Engine, Result, Store,
-        component::{Component, Instance, Linker, ResourceTable},
+        component::{Component, Instance, Linker, ResourceAny, ResourceTable},
     },
     wasmtime_wasi::p2::{IoView, WasiCtx, WasiView},
 };
@@ -59,6 +59,20 @@ pub struct HostState {
     /// The list of plugins meant for a Pluggable to iterate
     /// over
     pub plugins: Vec<ComponentInstance<Plugin>>,
+    pub table: ResourceTable,
+}
+impl HostState {
+    pub fn new_extension_state(
+        &mut self,
+    ) -> wasmtime::component::Resource<plugin_host_api::host_pluggable_bindings::example::plugin::pluggable_to_plugin::ExtensionState>{
+        dbg!(0);
+        let s = self
+            .table
+            .push(plugin_host_api::ExtensionState::new())
+            .unwrap();
+        dbg!(1);
+        s
+    }
 }
 
 impl ComponentEngine {
